@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/sagernet/sing-box/log"
 	_ "github.com/sagernet/v2box/types/v2rayjson"
-	_ "github.com/sagernet/v2box/types/xrayjson"
+	//_ "github.com/sagernet/v2box/types/xrayjson"
 
 	"github.com/spf13/cobra"
 )

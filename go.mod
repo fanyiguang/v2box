@@ -1,6 +1,6 @@
 module github.com/sagernet/v2box
 
-go 1.20
+go 1.18
 
 require (
 	github.com/maxmind/mmdbwriter v0.0.0-20230315153935-be21eaf06f90
@@ -10,6 +10,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/v2fly/v2ray-core/v5 v5.4.0
 	github.com/xtls/xray-core v1.8.1-0.20230320070138-172f353bd7fa
+	google.golang.org/protobuf v1.30.0
 )
 
 require (
@@ -100,7 +101,6 @@ require (
 	golang.org/x/tools v0.7.0 // indirect
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4 // indirect
 	google.golang.org/grpc v1.53.0 // indirect
-	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gvisor.dev/gvisor v0.0.0-20220901235040-6ca97ef2ce1c // indirect
 	lukechampine.com/blake3 v1.1.7 // indirect
