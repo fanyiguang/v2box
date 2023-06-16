@@ -64,7 +64,7 @@ func Migrate(content []byte, logger logger.Logger) (option.Options, error) {
 	}
 	if routerConfig := v2rayConfig.RouterConfig; routerConfig != nil {
 		for _, ruleMessage := range routerConfig.RuleList {
-			rule, err := migrateRule(ruleMessage)
+			rule, err := migrateRule(ruleMessage, routerConfig.Balancers, options.Outbounds)
 			if err != nil {
 				logger.Warn("ignoring rule: ", err)
 				continue

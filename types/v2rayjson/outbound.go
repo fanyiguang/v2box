@@ -182,8 +182,14 @@ func migrateOutbound(outboundConfig v4json.OutboundDetourConfig, dnsRule *option
 					method = "aes-128-gcm"
 				case shadowsocks.CipherType_AES_256_GCM:
 					method = "aes-256-gcm"
+				case shadowsocks.CipherType_AES_256_CFB:
+					method = "aes-256-cfb"
+				case shadowsocks.CipherType_AES_128_CFB:
+					method = "aes-128-cfb"
 				case shadowsocks.CipherType_CHACHA20_POLY1305:
 					method = "chacha20-ietf-poly1305"
+				case shadowsocks.CipherType_CHACHA20_IETF:
+					method = "chacha20-ietf"
 				default:
 					method = "none"
 				}

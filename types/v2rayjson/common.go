@@ -80,12 +80,12 @@ func parseTransport(streamSettings *v4json.StreamConfig) (option.V2RayTransportO
 			transportOptions.HTTPOptions.Path = httpSettings.Path
 			transportOptions.HTTPOptions.Method = httpSettings.Method
 			if len(httpSettings.Headers) > 0 {
-				transportOptions.HTTPOptions.Headers = make(map[string]string)
+				transportOptions.HTTPOptions.Headers = make(map[string]option.Listable[string])
 				for key, value := range httpSettings.Headers {
 					if value == nil || value.Len() == 0 {
 						continue
 					}
-					transportOptions.HTTPOptions.Headers[key] = (*value)[0]
+					transportOptions.HTTPOptions.Headers[key] = option.Listable[string]{(*value)[0]}
 				}
 			}
 		}
@@ -94,9 +94,9 @@ func parseTransport(streamSettings *v4json.StreamConfig) (option.V2RayTransportO
 		if wsSettings := streamSettings.WSSettings; wsSettings != nil {
 			transportOptions.WebsocketOptions.Path = wsSettings.Path
 			if wsSettings.Headers != nil {
-				transportOptions.WebsocketOptions.Headers = make(map[string]string)
+				transportOptions.WebsocketOptions.Headers = make(map[string]option.Listable[string])
 				for key, value := range wsSettings.Headers {
-					transportOptions.WebsocketOptions.Headers[key] = value
+					transportOptions.WebsocketOptions.Headers[key] = option.Listable[string]{value}
 				}
 			}
 			transportOptions.WebsocketOptions.MaxEarlyData = uint32(wsSettings.MaxEarlyData)

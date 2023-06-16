@@ -21,22 +21,19 @@ func migrateDNS(dnsConfig conf_dns.DNSConfig, options *option.Options) {
 			defaultServerAddress = defaultServer.Address.String()
 		}
 	}
-	if defaultServerAddress == "" {
-		defaultServerAddress = "tls://8.8.8.8"
-	}
+	//if defaultServerAddress == "" {
+	//	defaultServerAddress = "tls://8.8.8.8"
+	//}
 
 	var dnsOptions option.DNSOptions
 	dnsOptions.Strategy = parseStrategy(dnsConfig.QueryStrategy)
-	dnsOptions.Servers = []option.DNSServerOptions{
-		{
-			Address: "tls://8.8.8.8",
-			Tag:     "remote",
-		},
-		{
-			Address: "local",
-			Tag:     "local",
-			Detour:  "direct",
-		},
+	if defaultServerAddress != "" {
+		dnsOptions.Servers = []option.DNSServerOptions{
+			{
+				Address: defaultServerAddress,
+				Tag:     "remote",
+			},
+		}
 	}
 	if common.Any(dnsConfig.Servers, func(it *conf_dns.NameServerConfig) bool {
 		return len(it.Domains) > 0 && common.Any(it.Domains, func(it string) bool {

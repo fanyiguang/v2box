@@ -2,6 +2,9 @@ package v2rayjson
 
 import (
 	"encoding/json"
+	"github.com/sagernet/sing/common/domain"
+	"github.com/v2fly/v2ray-core/v5/infra/conf/synthetic/router"
+	"math/rand"
 	"strings"
 
 	C "github.com/sagernet/sing-box/constant"
@@ -28,15 +31,30 @@ type RawFieldRule struct {
 	Attributes string                  `json:"attrs"`
 }
 
-func migrateRule(ruleMessage json.RawMessage) (option.Rule, error) {
+func migrateRule(ruleMessage json.RawMessage, balancers []*router.BalancingRule, outbounds []option.Outbound) (option.Rule, error) {
 	var rule option.DefaultRule
 	var rawRule conf_rule.RouterRule
 	err := json.Unmarshal(ruleMessage, &rawRule)
 	if err != nil {
 		return option.Rule{}, err
 	}
-	if rawRule.BalancerTag != "" {
-		return option.Rule{}, E.New("balancer rule is not supported")
+	if rawRule.BalancerTag != "" && rawRule.OutboundTag == "" {
+		var outboundTags []string
+		for _, balancer := range balancers {
+			if balancer.Tag != rawRule.BalancerTag {
+				continue
+			}
+			matcher := domain.NewMatcher([]string{}, balancer.Selectors)
+			for _, outbound := range outbounds {
+				if matcher.Match(outbound.Tag) {
+					outboundTags = append(outboundTags, outbound.Tag)
+				}
+			}
+		}
+		if len(outboundTags) == 0 {
+			return option.Rule{}, E.New("balancer rule is not supported")
+		}
+		rule.Outbound = outboundTags[rand.Intn(len(outboundTags))]
 	}
 	if rawRule.Type != "field" {
 		return option.Rule{}, E.New("unknown router rule type: ", rawRule.Type)
@@ -46,7 +64,9 @@ func migrateRule(ruleMessage json.RawMessage) (option.Rule, error) {
 	if err != nil {
 		return option.Rule{}, err
 	}
-	rule.Outbound = field.OutboundTag
+	if field.OutboundTag != "" {
+		rule.Outbound = field.OutboundTag
+	}
 	for _, domain := range field.Domain {
 		err = parseDomain(domain, &rule)
 		if err != nil {
