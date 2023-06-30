@@ -96,6 +96,16 @@ func migrateOutbound(outboundConfig v4json.OutboundDetourConfig, dnsRule *option
 	if err != nil {
 		return option.Outbound{}, err
 	}
+	if transportOptions.Type != "" {
+		switch proxySettings.(type) {
+		case *trojan.ClientConfig:
+		case *vmess_outbound.Config:
+		case *vless_outbound.Config:
+		default:
+			return option.Outbound{}, E.New("outbound not Supported V2RayTransportOptions: ", transportOptions.Type)
+		}
+	}
+
 	switch proxyType := proxySettings.(type) {
 	case *blackhole.Config:
 		outbound.Type = C.TypeBlock
