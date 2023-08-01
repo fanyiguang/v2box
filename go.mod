@@ -3,8 +3,8 @@ module github.com/sagernet/v2box
 go 1.18
 
 replace (
-	github.com/sagernet/sing-box => D:\study\go-study\src\sing-box
-	github.com/v2fly/v2ray-core/v5 v5.4.0 => D:\study\go-objects\zixun\src\v2ray-core
+	github.com/sagernet/sing-box => github.com/fanyiguang/sing-box v1.1.6-0.20230706032022-0338c52e79d2
+	github.com/v2fly/v2ray-core/v5 v5.4.0 => github.com/fanyiguang/v2ray-core/v5 v5.0.0-20230616133207-924d28f8cb1d
 )
 
 require (
